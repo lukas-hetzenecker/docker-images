@@ -1,7 +1,9 @@
+# based on hwuethrich/supervisord
+
 # Base image with supervisord
 # http://supervisord.org/
 
-FROM hwuethrich/base
+FROM luhe/base
 MAINTAINER H. Wüthrich "hw@5px.ch"
 
 # Install supervisor

@@ -1,8 +1,10 @@
+# based on hwuethrich/base
+
 # Base
 #
 # VERSION               0.0.1
 
-FROM ubuntu
+FROM ubuntu:14.04
 MAINTAINER H. Wüthrich "hw@5px.ch"
 
 # Tell dpkg not to ask questions
