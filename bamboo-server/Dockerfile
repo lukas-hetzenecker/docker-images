@@ -23,9 +23,15 @@ RUN eatmydata -- apt-get install -yq oracle-java7-installer
 # VCS tools
 RUN eatmydata -- apt-get install -yq git subversion
 
+# Docker
+RUN eatmydata -- apt-get install -yq docker.io
+
+# Add startup script
+ADD start /start
+
 # Expose web and agent ports
 EXPOSE 8085
 EXPOSE 54663
 
 # Run supervisord
-CMD ["/start/supervisord"]
+CMD ["/start/prepare"]
