@@ -1,0 +1,24 @@
+#!/usr/bin/env bash 
+
+# pseudo-terminal devices
+mkdir -p /dev/pts
+mount -t devpts none /dev/pts
+
+# shared memory a good idea
+mkdir -p /dev/shm
+mount -t tmpfs none /dev/shm
+
+# pidfiles and such like
+mkdir -p /var/run
+mount -t tmpfs none /var/run
+
+# takes the pain out of cgroups
+cgroups-mount
+
+# mount /var/lib/docker with a tmpfs
+mkdir -p /var/lib/docker
+mount -t tmpfs none /var/lib/docker
+
+service docker start
+
+/start/supervisord
