@@ -17,7 +17,7 @@ if [[ $DB_HOST && $DB_ROOT_USER && $DB_ROOT_PASS && $DB_USER && $DB_PASS && $DB_
 fi
 
 if [[ $SERVER_ID && $LICENSE_KEY && $DB_TYPE && $DB_DRIVER && $DB_DIALECT && $DB_HOST && $DB_USER && $DB_PASS && $DB_DATABASE ]]; then
-  if [! -f $BAMBOO_HOME/bamboo.cfg.xml ]; then
+  if [ ! -f $BAMBOO_HOME/bamboo.cfg.xml ]; then
     cp /etc/bamboo.cfg.xml.new $BAMBOO_HOME/bamboo.cfg.xml
     xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='hibernate.connection.driver_class']" -v $DB_DRIVER $BAMBOO_HOME/bamboo.cfg.xml
     xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='hibernate.dialect']" -v $DB_DIALECT $BAMBOO_HOME/bamboo.cfg.xml
