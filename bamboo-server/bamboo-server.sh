@@ -8,6 +8,27 @@ echo "   - BAMBOO_HOME:    $BAMBOO_HOME"
 
 mkdir -p $BAMBOO_HOME
 
+DB_PORT=${DB_PORT:−5432}
+
+if [[ $DB_HOST && $DB_ROOT_USER && $DB_ROOT_PASS && $DB_USER && $DB_PASS && $DB_DATABASE ]]; then
+  PGPASSWORD=$DB_ROOT_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_ROOT_USER -c "CREATE DATABASE $DB_DATABASE" postgres
+  PGPASSWORD=$DB_ROOT_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_ROOT_USER -c "CREATE USER $DB_USER WITH NOCREATEDB ENCRYPTED PASSWORD '$DB_PASS'" postgres
+  PGPASSWORD=$DB_ROOT_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_ROOT_USER -c "GRANT ALL PRIVILEGES ON DATABASE $DB_DATABASE to $DB_USER" postgres
+fi
+
+if [[ $SERVER_ID && $LICENSE_KEY && $DB_TYPE && $DB_DRIVER && $DB_DIALECT && $DB_HOST && $DB_USER && $DB_PASS && $DB_DATABASE ]]; then
+  if [! -f $BAMBOO_HOME/bamboo.cfg.xml ]; then
+    cp /etc/bamboo.cfg.xml.new $BAMBOO_HOME/bamboo.cfg.xml
+    xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='hibernate.connection.driver_class']" -v $DB_DRIVER $BAMBOO_HOME/bamboo.cfg.xml
+    xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='hibernate.dialect']" -v $DB_DIALECT $BAMBOO_HOME/bamboo.cfg.xml
+    xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='hibernate.connection.url']" -v jdbc:$DB_TYPE://$DB_HOST:/$DB_DATABASE $BAMBOO_HOME/bamboo.cfg.xml
+    xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='hibernate.connection.username']" -v $DB_USER $BAMBOO_HOME/bamboo.cfg.xml
+    xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='hibernate.connection.password']" -v $DB_PASS $BAMBOO_HOME/bamboo.cfg.xml
+    xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='serverId']" -v $SERVER_ID $BAMBOO_HOME/bamboo.cfg.xml
+    xmlstarlet ed --inplace --update "/application-configuration/properties/property[@name='license.string']" -v $LICENSE_KEY $BAMBOO_HOME/bamboo.cfg.xml
+  fi
+fi
+
 BAMBOO_DIR=/opt/atlassian-bamboo-$BAMBOO_VERSION
 
 if [ -d $BAMBOO_DIR ]; then

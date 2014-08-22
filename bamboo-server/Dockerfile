@@ -14,6 +14,7 @@ ENV BAMBOO_HOME /home/bamboo
 # Add startup script and supervisor config
 ADD bamboo-server.sh /start/bamboo-server
 ADD supervisor.conf /etc/supervisor/conf.d/bamboo-server.conf
+ADD bamboo.cfg.xml.new /etc/bamboo.cfg.xml.new
 
 # Prepare repos for Oracle Java 7 and Docker
 RUN eatmydata -- apt-get install -yq software-properties-common && add-apt-repository ppa:webupd8team/java -y
@@ -26,6 +27,9 @@ RUN apt-get update
 RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 RUN eatmydata -- apt-get install -yq oracle-java7-installer
 
+# PostgreSQL Client
+RUN eatmydata -- apt-get install -yq postgresql-client
+
 # VCS tools
 RUN eatmydata -- apt-get install -yq git subversion
 
@@ -35,6 +39,9 @@ RUN eatmydata -- apt-get install -yq lxc-docker
 # Fig
 RUN eatmydata -- apt-get install -yq python-pip
 RUN pip install fig
+
+# XML Parser
+RUN eatmydata -- apt-get install -yq xmlstarlet
 
 # Add startup script
 ADD start /start
