@@ -8,14 +8,6 @@ echo "   - BAMBOO_HOME:    $BAMBOO_HOME"
 
 mkdir -p $BAMBOO_HOME
 
-DB_PORT=${DB_PORT:-5432}
-
-if [[ $DB_HOST && $DB_ROOT_USER && $DB_ROOT_PASS && $DB_USER && $DB_PASS && $DB_DATABASE ]]; then
-  PGPASSWORD=$DB_ROOT_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_ROOT_USER -c "CREATE DATABASE $DB_DATABASE" postgres || true
-  PGPASSWORD=$DB_ROOT_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_ROOT_USER -c "CREATE USER $DB_USER WITH NOCREATEDB ENCRYPTED PASSWORD '$DB_PASS'" postgres || true
-  PGPASSWORD=$DB_ROOT_PASS psql -h $DB_HOST -p $DB_PORT -U $DB_ROOT_USER -c "GRANT ALL PRIVILEGES ON DATABASE $DB_DATABASE to $DB_USER" postgres || true
-fi
-
 if [[ $SERVER_ID && $LICENSE_KEY && $DB_TYPE && $DB_DRIVER && $DB_DIALECT && $DB_HOST && $DB_USER && $DB_PASS && $DB_DATABASE ]]; then
   if [ ! -f $BAMBOO_HOME/bamboo.cfg.xml ]; then
     cp /etc/bamboo.cfg.xml.new $BAMBOO_HOME/bamboo.cfg.xml
