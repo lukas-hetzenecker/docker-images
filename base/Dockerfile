@@ -22,5 +22,7 @@ RUN apt-get update && apt-get -qy install eatmydata language-pack-en # 11/09/201
 # Fix locale
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 
+ADD common.bash /opt/scripts/common.bash
+
 # Add init scripts
 ADD init /init
