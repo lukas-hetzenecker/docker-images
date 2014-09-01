@@ -4,7 +4,7 @@
 # http://supervisord.org/
 
 FROM luhe/base
-MAINTAINER H. Wüthrich "hw@5px.ch"
+MAINTAINER Lukas Hetzenecker
 
 # Install supervisor
 RUN eatmydata apt-get -yq install supervisor && /etc/init.d/supervisor stop
