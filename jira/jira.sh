@@ -12,7 +12,7 @@ if [ -z "$JIRA_HOME" ]; then
   export JIRA_HOME=/opt/atlassian-home
 fi
 
-JIRA_DIR=/opt/atlassian-jira-$JIRA_VERSION
+JIRA_DIR=/opt/atlassian-jira-$JIRA_VERSION-standalone
 if [ -d $JIRA_DIR ]; then
   echo "-> Jira $JIRA_VERSION already found at $JIRA_DIR. Skipping download."
 else
