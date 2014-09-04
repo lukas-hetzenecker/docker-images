@@ -59,7 +59,6 @@ if [ -n "$DATABASE_URL" ]; then
     <pool-remove-abandoned-timeout>300</pool-remove-abandoned-timeout>
   </jdbc-datasource>
 </jira-database-config>
-END
 EOF
 
 fi
