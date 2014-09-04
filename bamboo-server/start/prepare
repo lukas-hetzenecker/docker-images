@@ -19,6 +19,12 @@ cgroups-mount
 mkdir -p /var/lib/docker
 mount -t tmpfs none /var/lib/docker
 
+# create loop device nodes
+for i in {0..6}
+do
+    mknod -m0660 /dev/loop$i b 7 $i
+done
+
 service docker start
 
 /start/supervisord
