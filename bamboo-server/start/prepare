@@ -84,10 +84,9 @@ popd >/dev/null
 rm -rf /var/run/docker.pid
 
 # If we were given a PORT environment variable, start as a simple daemon;
-# otherwise, spawn a shell as well
 if [ "$PORT" ]
 then
-	exec docker -d -H 0.0.0.0:$PORT
+	docker -d -H 0.0.0.0:$PORT &
 else
 	if [ "$LOG" == "file" ]
 	then
@@ -95,7 +94,6 @@ else
 	else
 		docker -d &
 	fi
-	exec bash
 fi
 
-/start/supervisord
+exec /start/supervisord
