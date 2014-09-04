@@ -43,6 +43,15 @@ RUN pip install fig
 # XML Parser
 RUN eatmydata -- apt-get install -yq xmlstarlet
 
+# Fleetctl & etcdctl
+RUN wget https://github.com/coreos/fleet/releases/download/v0.7.1/fleet-v0.7.1-linux-amd64.tar.gz
+RUN tar --strip-components=1 -zxf fleet-v0.7.1-linux-amd64.tar.gz -C /usr/local/bin/
+RUM rm fleet-v0.7.1-linux-amd64.tar.gz
+
+RUN wget https://github.com/coreos/etcd/releases/download/v0.4.6/etcd-v0.4.6-linux-amd64.tar.gz
+RUN tar --strip-components=1 -zxf etcd-v0.4.6-linux-amd64.tar.gz -C /usr/local/bin/
+RUM rm etcd-v0.4.6-linux-amd64.tar.gz
+
 # Add startup script
 ADD start /start
 
