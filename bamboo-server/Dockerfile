@@ -4,44 +4,51 @@
 #
 # VERSION               0.0.1
 
-FROM luhe/supervisord
+FROM phusion/baseimage:0.9.16
 MAINTAINER Lukas Hetzenecker
 
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
+
 # Environment
-ENV BAMBOO_VERSION 5.4
+ENV BAMBOO_VERSION 5.7.2
 ENV BAMBOO_HOME /home/bamboo
 
-# Add startup script and supervisor config
-ADD bamboo-server.sh /start/bamboo-server
-ADD supervisor.conf /etc/supervisor/conf.d/bamboo-server.conf
+# Expose web and agent ports
+EXPOSE 8085
+EXPOSE 54663
+
+# Add runit service
+ADD bamboo-server.sh /etc/service/bamboo-server/run
+
 ADD bamboo.cfg.xml.new /etc/bamboo.cfg.xml.new
 
 # Prepare repos for Oracle Java 7 and Docker
-RUN eatmydata -- apt-get install -yq software-properties-common && add-apt-repository ppa:webupd8team/java -y
-RUN eatmydata -- apt-get install -yq apt-transport-https
+RUN apt-get install -yq software-properties-common && add-apt-repository ppa:webupd8team/java -y
+RUN apt-get install -yq apt-transport-https
 RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 36A1D7869245C8950F966E92D8576A8BA88D21E9
 RUN sh -c "echo deb https://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-RUN apt-get update
+RUN apt-get update  && apt-get upgrade -y
 
 # Install Oracle Java 7
 RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN eatmydata -- apt-get install -yq oracle-java7-installer
+RUN apt-get install -yq oracle-java7-installer
 
 # PostgreSQL Client
-RUN eatmydata -- apt-get install -yq postgresql-client
+RUN apt-get install -yq postgresql-client
 
 # VCS tools
-RUN eatmydata -- apt-get install -yq git subversion
+RUN apt-get install -yq git subversion
 
 # Docker
-RUN eatmydata -- apt-get install -yq lxc-docker
+RUN apt-get install -yq lxc-docker
 
 # Fig
-RUN eatmydata -- apt-get install -yq python-pip
+RUN apt-get install -yq python-pip
 RUN pip install fig
 
 # XML Parser
-RUN eatmydata -- apt-get install -yq xmlstarlet
+RUN apt-get install -yq xmlstarlet
 
 # Fleetctl & etcdctl
 RUN wget https://github.com/coreos/fleet/releases/download/v0.10.2/fleet-v0.10.2-linux-amd64.tar.gz
@@ -50,14 +57,5 @@ RUM rm fleet-v0.10.2-linux-amd64.tar.gz
 
 RUN wget https://github.com/coreos/etcd/releases/download/v2.1.2/etcd-v2.1.2-linux-amd64.tar.gz
 RUN tar --strip-components=1 -zxf etcd-v2.1.2-linux-amd64.tar.gz -C /usr/local/bin/
-RUM rm etcd-v2.1.2-linux-amd64.tar.gz
+RUN rm etcd-v2.1.2-linux-amd64.tar.gz
 
-# Add startup script
-ADD start /start
-
-# Expose web and agent ports
-EXPOSE 8085
-EXPOSE 54663
-
-# Run supervisord
-CMD ["/start/prepare"]
