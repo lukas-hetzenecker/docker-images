@@ -83,18 +83,7 @@ popd >/dev/null
 # delete it so that docker can start.
 rm -rf /var/run/docker.pid
 
-# If we were given a PORT environment variable, start as a simple daemon;
-if [ "$PORT" ]
-then
-	docker -d -H 0.0.0.0:$PORT &
-else
-	if [ "$LOG" == "file" ]
-	then
-		docker -d &>/var/log/docker.log &
-	else
-		docker -d &
-	fi
-fi
+docker daemon "$DOCKER_EXTRA_ARGS" &
 
 set -e # Exit on errors
 
