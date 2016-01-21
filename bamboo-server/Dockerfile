@@ -32,7 +32,7 @@ RUN apt-get update  && apt-get upgrade -y
 
 # Install Oracle Java 7
 RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN apt-get install -yq oracle-java7-installer
+RUN apt-get install -yq oracle-java8-installer
 
 # PostgreSQL Client
 RUN apt-get install -yq postgresql-client
