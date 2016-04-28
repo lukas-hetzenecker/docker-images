@@ -38,6 +38,20 @@ fi
 # Uncomment to increase Tomcat's maximum heap allocation
 # export JAVA_OPTS=-Xmx512M $JAVA_OPTS
 
+if [ -n "${BAMBOO_PROXY_NAME}" ]; then
+  xmlstarlet ed -P -S -L --insert "//Connector[not(@proxyName)]" --type attr -n proxyName --value "${BAMBOO_PROXY_NAME}" ${BAMBOO_DIR}/conf/server.xml
+fi
+
+if [ -n "${BAMBOO_PROXY_PORT}" ]; then
+  xmlstarlet ed -P -S -L --insert "//Connector[not(@proxyPort)]" --type attr -n proxyPort --value "${BAMBOO_PROXY_PORT}" ${BAMBOO_DIR}/conf/server.xml
+fi
+
+if [ -n "${BAMBOO_PROXY_SCHEME}" ]; then
+  xmlstarlet ed -P -S -L --insert "//Connector[not(@scheme)]" --type attr -n scheme --value "${BAMBOO_PROXY_SCHEME}" ${BAMBOO_DIR}/conf/server.xml
+fi
+
+
+
 echo "-> Running Bamboo server ..."
 $BAMBOO_DIR/bin/catalina.sh run &
 
