@@ -50,12 +50,3 @@ RUN pip install docker-compose
 # XML Parser
 RUN apt-get install -yq xmlstarlet
 
-# Fleetctl & etcdctl
-RUN wget https://github.com/coreos/fleet/releases/download/v0.11.5/fleet-v0.11.5-linux-amd64.tar.gz
-RUN tar --strip-components=1 -zxf fleet-v0.11.5-linux-amd64.tar.gz -C /usr/local/bin/
-RUN rm fleet-v0.11.5-linux-amd64.tar.gz
-
-RUN wget https://github.com/coreos/etcd/releases/download/v2.2.3/etcd-v2.2.3-linux-amd64.tar.gz
-RUN tar --strip-components=1 -zxf etcd-v2.2.3-linux-amd64.tar.gz -C /usr/local/bin/
-RUN rm etcd-v2.2.3-linux-amd64.tar.gz
-
